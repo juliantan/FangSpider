@@ -7,7 +7,18 @@ from FangSpider.items import FangspiderItem
 
 class NewfangspiderSpider(scrapy.Spider):
     name = 'NewFangSpider'
-    allowed_domains = ['www.fang.com']
+    allowed_domains = ['www.fang.com',
+                       'newhouse.fang.com',
+                       'newhouse.sh.fang.com',
+                       'newhouse.gz.fang.com',
+                       'newhouse.sz.fang.com',
+                       'newhouse.dg.fang.com',
+                       'newhouse.huizhou.fang.com',
+                       'newhouse.fs.fang.com',
+                       'newhouse.zs.fang.com',
+                       'newhouse.zh.fang.com',
+                       'newhouse.hz.fang.com',
+                       'newhouse.tj.fang.com']
     start_urls = [
         'http://newhouse.fang.com/house/s/c9y/',
         'http://newhouse.sh.fang.com/house/s/c9y/',
@@ -22,6 +33,7 @@ class NewfangspiderSpider(scrapy.Spider):
         'http://newhouse.tj.fang.com/house/s/c9y/']
 
     def parse(self, response):
+        print 'response.url:'+response.url
         item = FangspiderItem()
         loupanlist = response.xpath(
             '//div[@class="contentList fl clearfix"]/ul[@class="flist"]')
@@ -87,6 +99,11 @@ class NewfangspiderSpider(scrapy.Spider):
                 '%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
             yield item
         baseurl = re.findall(re.compile(r'.*?com'), response.url)[0]
-        nextpageurl = baseurl + \
-            response.xpath('//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract()[0]
-        yield scrapy.Request(nextpageurl, callback=self.parse)
+        if response.xpath('//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract() != []:
+            nextpageurl = baseurl + \
+                          response.xpath(
+                              '//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract()[
+                              0]
+            print 'nextpageurl:' + nextpageurl
+            yield scrapy.Request(nextpageurl, callback=self.parse)
+
