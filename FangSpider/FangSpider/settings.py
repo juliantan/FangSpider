@@ -9,6 +9,10 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
+DB_Host = 'localhost'
+DB_User = 'root'
+DB_Pwd = '123456'
+
 BOT_NAME = 'FangSpider'
 
 SPIDER_MODULES = ['FangSpider.spiders']

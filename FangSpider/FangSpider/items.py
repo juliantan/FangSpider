@@ -11,6 +11,7 @@ import scrapy
 class FangspiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    EstateArea = scrapy.Field()
     Name = scrapy.Field()
     HuXing = scrapy.Field()
     Face = scrapy.Field()
