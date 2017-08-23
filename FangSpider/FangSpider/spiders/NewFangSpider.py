@@ -33,80 +33,50 @@ class NewfangspiderSpider(scrapy.Spider):
         'http://newhouse.tj.fang.com/house/s/c9y/']
 
     def parse(self, response):
-        print 'response.url:' + response.url
-        item = FangspiderItem()
-        loupanlist = response.xpath(
-            '//div[@class="contentList fl clearfix"]/ul[@class="flist"]')
-        for i in xrange(1, len(loupanlist)):
-            item['EstateArea'] = re.findall(re.compile(u'(.*?)房产'),response.xpath(
-                '//ul[@class="tf f12"]/li[1]/a/text()').extract()[0])[0]
-            re.findall(re.compile(r'.*?com'), response.url)[0]
-            if loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="finfo c_333_f14"]/h3/a/text()').extract() == []:
-                item['Name'] = u'暂无'
-            else:
-                item['Name'] = loupanlist[i -
-                                          1].xpath('./li[1]/div[@class="finfo c_333_f14"]/h3/a/text()').extract()[0]
+        try:
+            # print 'response.url:' + response.url
+            loupanlist = response.xpath('//div[@class="contentList fl clearfix"]/ul[@class="flist"]')
+            for i in xrange(1, len(loupanlist)):
+                loupanurl = loupanlist[i - 1].xpath('./li[1]/div[@class="finfo c_333_f14"]/h3/a/@href').extract()[0]
+                # print 'loupanurl:',loupanurl
+                yield scrapy.Request(loupanurl, callback=self.parseLoupanInfo)
+            baseurl = re.findall(re.compile(r'.*?com'), response.url)[0]
+            if response.xpath('//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract() != []:
+                nextpageurl = baseurl + response.xpath('//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract()[0]
+                # print 'nextpageurl:' + nextpageurl
+                yield scrapy.Request(nextpageurl, callback=self.parse)
+        except Exception as e:
+            print e
 
-            if loupanlist[i - 1].xpath('./li[1]/div[@class="finfo c_333_f14"]/p[@class="hx"]').xpath(
-                    'string(.)').extract() == []:
-                item['HuXing'] = u'暂无'
-            else:
-                item['HuXing'] = loupanlist[i - 1].xpath('./li[1]/div[@class="finfo c_333_f14"]/p[@class="hx"]').xpath(
-                    'string(.)').extract()[0].replace('\n', '').replace('\t', '').replace(' ', '').split('|')[0]
+    def parseLoupanInfo(self,response):
+        try:
+            print 'response.url:' + response.url
+            items = FangspiderItem()
+            items['EstateArea'] = ""
+            items['LouPanName'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/a/text()').extract()[0]
+            items['UnitNum'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0]
+            items['RefPrice'] = response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0]
+            items['AvePrice'] = response.xpath('//div[@class="right_box"]/div[@class="right_box_lpj"]/p/span[@class="cl_666"]/span/text()').extract()[0]
+            sub =response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14"]')
+            items['Mortgage'] = sub[0].xpath('string(.)').extract()[0]
+            items['HuXing'] = sub[1].xpath('string(.)').extract()[0]
+            items['LouDong'] = sub[2].xpath('string(.)').extract()[0]
+            items['Floor'] = sub[3].xpath('string(.)').extract()[0]
+            items['BuildCate'] = sub[4].xpath('string(.)').extract()[0]
+            items['Area'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[0]
+            items['Street'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[1]
+            items['Position'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/a/text()').extract()[0]
+            items['Face'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[1]/text()').extract()[0]
+            items['Unit'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[2]/text()').extract()[0]
+            items['LouPanUrl'] = ""
+            items['CrawlTime'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            # print items['LouPanName']
+        except Exception as e:
+            print e
+        finally:
+            yield items 
 
-            if loupanlist[i - 1].xpath('./li[1]/div[@class="finfo c_333_f14"]/p[@class="hx"]').xpath(
-                    'string(.)').extract() == []:
-                item['Face'] = u'暂无'
-            else:
-                item['Face'] = loupanlist[i - 1].xpath('./li[1]/div[@class="finfo c_333_f14"]/p[@class="hx"]').xpath(
-                    'string(.)').extract()[0].replace('\n', '').replace('\t', '').replace(' ', '').split('|')[1]
 
-            if loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="finfo c_333_f14"]/p[@class="font_size14"]/a/span/text()').extract() == []:
-                item['Region'] = u'暂无'
-            else:
-                item['Region'] = loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="finfo c_333_f14"]/p[@class="font_size14"]/a/span/text()').extract()[0]
 
-            if loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="finfo c_333_f14"]/p[@class="font_size14"]/span/text()').extract() == []:
-                item['Loc'] == u'暂无'
-            else:
-                item['Loc'] = loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="finfo c_333_f14"]/p[@class="font_size14"]/span/text()').extract()[0]
 
-            if loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="flist_right clearfix mt_-26"]/div[@class="mt8 alignR float_ri"]/p[1]/text()').extract() == []:
-                item['Area'] = u'暂无'
-            else:
-                item['Area'] = loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="flist_right clearfix mt_-26"]/div[@class="mt8 alignR float_ri"]/p[1]/text()').extract()[0]
 
-            if loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="flist_right clearfix mt_-26"]/div[@class="moreInfo float_ri"]/p[@class="danjia alignCenter"]/text()').extract() == []:
-                item['UnitPrice'] = u'暂无'
-            else:
-                item['UnitPrice'] = loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="flist_right clearfix mt_-26"]/div[@class="moreInfo float_ri"]/p[@class="danjia alignCenter"]/text()').extract()[0]
-
-            if loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="flist_right clearfix mt_-26"]/div[@class="moreInfo float_ri"]/p[@class="alignCenter"]/span/text()').extract() == []:
-                item['TotalPrice'] = u'暂无'
-            else:
-                item['TotalPrice'] = loupanlist[i - 1].xpath(
-                    './li[1]/div[@class="flist_right clearfix mt_-26"]/div[@class="moreInfo float_ri"]/p[@class="alignCenter"]/span/text()').extract()[0]
-            item['LoupanUrl'] = loupanlist[i -
-                                           1].xpath('./li[1]/div[@class="finfo c_333_f14"]/h3/a/@href').extract()[0]
-            item['CrawlTime'] = time.strftime(
-                '%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-            yield item
-        baseurl = re.findall(re.compile(r'.*?com'), response.url)[0]
-        if response.xpath(
-                '//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract() != []:
-            nextpageurl = baseurl + \
-                response.xpath(
-                    '//div[@class="contentList fl clearfix"]/div[@id="sjina_D25_101"]/ul[@class="clearfix"]/li[@class="fr"]/a[@class="next"]/@href').extract()[
-                    0]
-            print 'nextpageurl:' + nextpageurl
-            yield scrapy.Request(nextpageurl, callback=self.parse)
