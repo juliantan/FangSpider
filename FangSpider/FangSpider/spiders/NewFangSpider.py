@@ -52,7 +52,7 @@ class NewfangspiderSpider(scrapy.Spider):
         try:
             print 'response.url:' + response.url
             items = FangspiderItem()
-            items['EstateArea'] = ""
+            items['EstateArea'] = re.findall(re.compile(u'(.*?)新房'),response.xpath('//div[@id="fyxq_B01_03"]/ul[@class="tf f12"]/li[2]/a/text()').extract()[0])[0]
             items['LouPanName'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/a/text()').extract()[0]
             items['UnitNum'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0]
             items['RefPrice'] = response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0]
@@ -68,7 +68,7 @@ class NewfangspiderSpider(scrapy.Spider):
             items['Position'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/a/text()').extract()[0]
             items['Face'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[1]/text()').extract()[0]
             items['Unit'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[2]/text()').extract()[0]
-            items['LouPanUrl'] = ""
+            items['LouPanUrl'] = response.url
             items['CrawlTime'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
             # print items['LouPanName']
         except Exception as e:
