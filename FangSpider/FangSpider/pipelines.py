@@ -10,7 +10,7 @@ import settings
 
 class FangspiderPipeline(object):
     def process_item(self, item, spider):
-        pass
+        
 
         # conn = MySQLdb.connect(
         #     host=settings.DB_Host,
@@ -37,4 +37,4 @@ class FangspiderPipeline(object):
         # cur.close()
         # conn.commit()
         # conn.close()
-        # return item
+        return item

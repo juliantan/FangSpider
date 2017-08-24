@@ -7,18 +7,7 @@ from FangSpider.items import FangspiderItem
 
 class NewfangspiderSpider(scrapy.Spider):
     name = 'NewFangSpider'
-    allowed_domains = ['www.fang.com',
-                       'newhouse.fang.com',
-                       'newhouse.sh.fang.com',
-                       'newhouse.gz.fang.com',
-                       'newhouse.sz.fang.com',
-                       'newhouse.dg.fang.com',
-                       'newhouse.huizhou.fang.com',
-                       'newhouse.fs.fang.com',
-                       'newhouse.zs.fang.com',
-                       'newhouse.zh.fang.com',
-                       'newhouse.hz.fang.com',
-                       'newhouse.tj.fang.com']
+    allowed_domains = ['fang.com']
     start_urls = [
         'http://newhouse.fang.com/house/s/c9y/',
         'http://newhouse.sh.fang.com/house/s/c9y/',
@@ -50,7 +39,7 @@ class NewfangspiderSpider(scrapy.Spider):
 
     def parseLoupanInfo(self,response):
         try:
-            print 'response.url:' + response.url
+            # print 'response.url:' + response.url
             items = FangspiderItem()
             items['EstateArea'] = re.findall(re.compile(u'(.*?)新房'),response.xpath('//div[@id="fyxq_B01_03"]/ul[@class="tf f12"]/li[2]/a/text()').extract()[0])[0]
             items['LouPanName'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/a/text()').extract()[0]
