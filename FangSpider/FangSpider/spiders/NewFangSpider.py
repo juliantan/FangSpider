@@ -41,22 +41,82 @@ class NewfangspiderSpider(scrapy.Spider):
         try:
             # print 'response.url:' + response.url
             items = FangspiderItem()
-            items['EstateArea'] = re.findall(re.compile(u'(.*?)新房'),response.xpath('//div[@id="fyxq_B01_03"]/ul[@class="tf f12"]/li[2]/a/text()').extract()[0])[0]
-            items['LouPanName'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/a/text()').extract()[0]
-            items['UnitNum'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0]
-            items['RefPrice'] = response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0]
-            items['AvePrice'] = response.xpath('//div[@class="right_box"]/div[@class="right_box_lpj"]/p/span[@class="cl_666"]/span/text()').extract()[0]
+            if re.findall(re.compile(u'(.*?)新房'),response.xpath('//div[@id="fyxq_B01_03"]/ul[@class="tf f12"]/li[2]/a/text()').extract()[0])[0]:
+            	items['EstateArea'] = re.findall(re.compile(u'(.*?)新房'),response.xpath('//div[@id="fyxq_B01_03"]/ul[@class="tf f12"]/li[2]/a/text()').extract()[0])[0]
+            else:
+            	items['EstateArea'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/a/text()').extract()[0]:
+            	items['LouPanName'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/a/text()').extract()[0]
+            else:
+            	items['LouPanName'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0]:
+            	items['UnitNum'] = response.xpath('//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0]
+            else:
+            	items['UnitNum'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0]:
+            	items['RefPrice'] = response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0]
+            else:
+            	items['RefPrice'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[@class="right_box_lpj"]/p/span[@class="cl_666"]/span/text()').extract()[0]:
+            	items['AvePrice'] = response.xpath('//div[@class="right_box"]/div[@class="right_box_lpj"]/p/span[@class="cl_666"]/span/text()').extract()[0]
+            else:
+            	items['AvePrice'] = '/'
+
             sub =response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14"]')
-            items['Mortgage'] = sub[0].xpath('string(.)').extract()[0]
-            items['HuXing'] = sub[1].xpath('string(.)').extract()[0]
-            items['LouDong'] = sub[2].xpath('string(.)').extract()[0]
-            items['Floor'] = sub[3].xpath('string(.)').extract()[0]
-            items['BuildCate'] = sub[4].xpath('string(.)').extract()[0]
-            items['Area'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[0]
-            items['Street'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[1]
-            items['Position'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/a/text()').extract()[0]
-            items['Face'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[1]/text()').extract()[0]
-            items['Unit'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[2]/text()').extract()[0]
+            if sub[0].xpath('string(.)').extract()[0]:
+            	items['Mortgage'] = sub[0].xpath('string(.)').extract()[0]
+            else:
+            	items['Mortgage'] = '/'
+
+            if sub[1].xpath('string(.)').extract()[0]:
+            	items['HuXing'] = sub[1].xpath('string(.)').extract()[0]
+            else:
+            	items['HuXing'] = '/'
+
+            if sub[2].xpath('string(.)').extract()[0]:
+            	items['LouDong'] = sub[2].xpath('string(.)').extract()[0]
+            else:
+            	items['LouDong'] = '/'
+
+            if sub[3].xpath('string(.)').extract()[0]:
+            	items['Floor'] = sub[3].xpath('string(.)').extract()[0]
+            else:
+            	items['Floor'] = sub[3].xpath('string(.)').extract()[0]
+
+            if sub[4].xpath('string(.)').extract()[0]:
+            	items['BuildCate'] = sub[4].xpath('string(.)').extract()[0]
+            else:
+            	items['BuildCate'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[0]:
+            	items['Area'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[0]
+            else:
+            	items['Area'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[1]:
+            	items['Street'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/span[2]/a/text()').extract()[1]
+            else:
+            	items['Street'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/a/text()').extract()[0]:
+            	items['Position'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/ul[@class="right_box_zzlxnrl hidden"]/li[@class="f14 w700"]/a/text()').extract()[0]
+            else:
+            	items['Position'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[1]/text()').extract()[0]:
+            	items['Face'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[1]/text()').extract()[0]
+            else:
+            	items['Face'] = '/'
+
+            if response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[2]/text()').extract()[0]:
+            	items['Unit'] = response.xpath('//div[@class="right_box"]/div[3]/div[@class="right_box_zzlxnr"]/div[@class="right_box_zzlxnrr_more"]/ul[1]/li[2]/text()').extract()[0]
+            else:
+            	items['Unit'] = '/'
+
             items['LouPanUrl'] = response.url
             items['CrawlTime'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
             # print items['LouPanName']
