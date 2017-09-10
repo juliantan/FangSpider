@@ -9,9 +9,14 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-DB_Host = 'localhost'
-DB_User = 'root'
-DB_Pwd = '123456'
+#Mysql
+# DB_Host = 'localhost'
+# DB_User = 'root'
+# DB_Pwd = '123456'
+
+#Mongodb
+Mongodb_Host = '192.168.100'
+Mongodb_Port = 27017
 
 BOT_NAME = 'FangSpider'
 
