@@ -19,9 +19,9 @@ class NewfangspiderSpider(RedisSpider):
         'http://newhouse.huizhou.fang.com/house/s/c9y/',
         'http://newhouse.fs.fang.com/house/s/c9y/',
         'http://newhouse.zs.fang.com/house/s/c9y/',
-        # 'http://newhouse.zh.fang.com/house/s/c9y/',
-        # 'http://newhouse.hz.fang.com/house/s/c9y/',
-        # 'http://newhouse.tj.fang.com/house/s/c9y/'
+        'http://newhouse.zh.fang.com/house/s/c9y/',
+        'http://newhouse.hz.fang.com/house/s/c9y/',
+        'http://newhouse.tj.fang.com/house/s/c9y/'
         ]
 
     def start_requests(self):
