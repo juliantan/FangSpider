@@ -3,11 +3,13 @@ import scrapy
 import re
 import time
 from FangSpider.items import FangspiderItem
+from scrapy_redis.spiders import RedisSpider
+from scrapy.http import Request
 
-
-class NewfangspiderSpider(scrapy.Spider):
+class NewfangspiderSpider(RedisSpider):
     name = 'NewFangSpider'
     allowed_domains = ['fang.com']
+    redis_key = "NewFangSpider:start_urls"
     start_urls = [
         'http://newhouse.fang.com/house/s/c9y/',
         'http://newhouse.sh.fang.com/house/s/c9y/',
@@ -20,6 +22,10 @@ class NewfangspiderSpider(scrapy.Spider):
         'http://newhouse.zh.fang.com/house/s/c9y/',
         'http://newhouse.hz.fang.com/house/s/c9y/',
         'http://newhouse.tj.fang.com/house/s/c9y/']
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield Request(url=url,callback=self.parse)
 
     def parse(self, response):
         try:
