@@ -15,7 +15,7 @@
 # DB_Pwd = '123456'
 
 #Mongodb
-Mongodb_Host = '192.168.100'
+Mongodb_Host = '192.168.1.69'
 Mongodb_Port = 27017
 
 BOT_NAME = 'FangSpider'

@@ -12,10 +12,7 @@ class FangspiderPipeline(object):
 
     def process_item(self, item, spider):
         client = pymongo.MongoClient(host=settings.Mongodb_Host, port=settings.Mongodb_Port)
-        db = client.fang
-        my_set = db.test_set
-        print type(item)
-        print type(dict(item))
-        print dict(item)
-        my_set.insert(dict(item))
+        db = client.fangdb
+        collection = db.newfang
+        collection.insert(dict(item))
         return item
