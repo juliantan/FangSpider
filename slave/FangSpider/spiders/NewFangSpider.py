@@ -71,7 +71,7 @@ class NewfangspiderSpider(RedisSpider):
         if response.xpath(
                 '//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract():
             items['UnitNum'] = response.xpath(
-                '//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0]
+                '//div[@class="right_box"]/p[@id="fyxq_B01_05"]/strong/text()').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ','')
         else:
             items['UnitNum'] = '/'
 
@@ -97,22 +97,22 @@ class NewfangspiderSpider(RedisSpider):
             items['Mortgage'] = '/'
 
         if sub[1].xpath('string(.)').extract():
-            items['HuXing'] = sub[1].xpath('string(.)').extract()[0]
+            items['HuXing'] = sub[1].xpath('string(.)').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ','')
         else:
             items['HuXing'] = '/'
 
         if sub[2].xpath('string(.)').extract():
-            items['LouDong'] = sub[2].xpath('string(.)').extract()[0]
+            items['LouDong'] = sub[2].xpath('string(.)').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ','')
         else:
             items['LouDong'] = '/'
 
         if sub[3].xpath('string(.)').extract():
-            items['Floor'] = sub[3].xpath('string(.)').extract()[0]
+            items['Floor'] = sub[3].xpath('string(.)').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ','')
         else:
-            items['Floor'] = sub[3].xpath('string(.)').extract()[0]
+            items['Floor'] = '/'
 
         if sub[4].xpath('string(.)').extract():
-            items['BuildCate'] = sub[4].xpath('string(.)').extract()[0]
+            items['BuildCate'] = sub[4].xpath('string(.)').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ','')
         else:
             items['BuildCate'] = '/'
 
