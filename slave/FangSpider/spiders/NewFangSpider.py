@@ -77,7 +77,7 @@ class NewfangspiderSpider(RedisSpider):
 
         if response.xpath(
                 '//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract():
-            items['RefPrice'] = re.findall(re.compile(r'(\d.*?)万'),response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0])[0]
+            items['RefPrice'] = re.findall(re.compile(u'(\d.*?)万'),response.xpath('//div[@class="right_box"]/div[@id="right_box_zj"]/p/span[2]').xpath('string(.)').extract()[0])[0]
         else:
             items['RefPrice'] = '/'
 
@@ -96,7 +96,7 @@ class NewfangspiderSpider(RedisSpider):
             items['Mortgage'] = '/'
 
         if sub[1].xpath('string(.)').extract():
-            items['HuXing'] = re.findall(re.compile(r'建面(\d.*?)㎡'),sub[1].xpath('string(.)').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ',''))
+            items['HuXing'] = re.findall(re.compile(u'建面(\d.*?)㎡'),sub[1].xpath('string(.)').extract()[0].replace('\r','').replace('\n','').replace('\t','').replace(' ',''))[0]
         else:
             items['HuXing'] = '/'
 
