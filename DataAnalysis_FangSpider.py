@@ -5,16 +5,16 @@ import pandas as pd
 import numpy as np
 import matplotlib.pylab as plt
 
-client = pymongo.MongoClient('192.168.1.69',27017)
+client = pymongo.MongoClient('192.168.1.123',27017)
 fangdb = client['fangdb']
 newfanginfo = fangdb['newfanginfo(20170915_2)']
 df = pd.DataFrame(list(newfanginfo.find()))
 
 df1 = df.loc[:,['EstateArea','RefPrice','AvePrice','HuXing']]
 df1est = df1['EstateArea']
-df1ref = df1['RefPrice'].replace('/','0').astype('float')
-df1ave = df1['AvePrice'].replace('/','0').astype('float')
-df1hx = df1['HuXing'].replace('/','0').astype('int')
+df1ref = df1['RefPrice']
+df1ave = df1['AvePrice']
+df1hx = df1['HuXing']
 df1ave = df1ref*10000/df1hx
 print df1ave
 dic = {'EstateArea':df1est,'RefPrice':df1ref,'AvePrice':df1ave,'HuXing':df1hx}

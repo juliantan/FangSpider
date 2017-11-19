@@ -15,7 +15,7 @@
 # DB_Pwd = '123456'
 
 #Mongodb
-Mongodb_Host = 'localhost'
+Mongodb_Host = '192.168.1.123'
 Mongodb_Port = 27017
 
 BOT_NAME = 'FangSpider'
@@ -105,6 +105,6 @@ SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 REDIE_URL = None
-REDIS_HOST = 'localhost'
+REDIS_HOST = '192.168.1.123'
 REDIS_PORT = 6379
 
